@@ -1,10 +1,8 @@
-# encoding: big5
-
 require 'optparse'
 
 LISTFILE = File.join(File.dirname(File.expand_path($0)), 'movelist.dump')
 
-targets = File.exist?(LISTFILE) ? File.open(LISTFILE, 'r:big5') { |f| Marshal.load(f) } : {}
+targets = File.exist?(LISTFILE) ? File.open(LISTFILE, 'r:UTF-8') { |f| Marshal.load(f) } : {}
 
 options = {}
 optparse = OptionParser.new do |opts|
@@ -38,6 +36,11 @@ optparse = OptionParser.new do |opts|
 end
 optparse.parse!
 
+def display_error(error_message)
+  puts error_message
+  exit
+end
+
 if options[:list]
   targets.each do |name, path|
     puts '%-12s%s' % [name + ': ', path.gsub('/', '\\')]
@@ -50,16 +53,14 @@ elsif options[:Modify]
   exit 10
 elsif !options[:add].empty?
   if targets.include? options[:add]
-    puts "#{options[:add]} is already used"
-    exit
+    display_error "#{options[:add]} is already used"
   end
 
   targets[options[:add]] = Dir.pwd
   File.open(LISTFILE, 'w:big5') { |f| Marshal.dump(targets, f) }
 elsif !options[:delete].empty?
   unless targets.include? options[:delete]
-    puts "#{options[:delete]} is not exist"
-    exit
+    display_error "#{options[:delete]} is not exist"
   end
 
   targets.delete options[:delete]
@@ -71,20 +72,23 @@ else
   dir.gsub!("\\", '/') if dir.include?("\\")
   dir, *path_abbrs = dir.split('/')
   
-  unless targets.include? dir
-    puts 'Target not found'
-    exit
+  if targets.include?(dir)
+    dir = targets[dir]
+  else
+    if dir.end_with?(':')
+      if File.exist?(dir)
+        dir << '/'
+      else
+        display_error 'No such drive'
+      end
+    else
+      display_error 'Target not found'
+    end
   end
-
-  #path = File.join(targets[dir], *path_abbr)
-
-  #until File.exist? path
-    #path = path.split('/')[0..-2].join('/')
-  #end
 
   path, index = "", path_abbrs.size
   until File.exist? path
-    path = File.join(targets[dir], *path_abbrs[0, index])
+    path = File.join(dir, *path_abbrs[0, index])
     index -= 1
   end
 
@@ -106,7 +110,7 @@ else
 
     def get_path_abbr_index(path_abbr)
       if path_abbr[/\d+\Z/]
-        abbr, abbr_index = path_abbr.split(/(\d+\Z)/)
+        abbr, abbr_index = path_abbr.split(/(-?\d+\Z)/)
         [abbr, abbr_index.to_i]
       else
         [path_abbr, 0]
@@ -117,7 +121,13 @@ else
       abbr_hash = get_abbr_hash(get_all_dir(path))
       abbr, abbr_index = get_path_abbr_index(path_abbrs[index])
       break unless abbr_hash.include? abbr
-      path = File.join(path, abbr_hash[abbr][abbr_index])
+
+      begin
+        path = File.join(path, abbr_hash[abbr][abbr_index])
+      rescue
+        display_error 'Wrong index'
+      end
+
       index += 1
     end
   end
