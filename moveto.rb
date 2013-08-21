@@ -120,12 +120,17 @@ else
     until index == path_abbrs.size
       abbr_hash = get_abbr_hash(get_all_dir(path))
       abbr, abbr_index = get_path_abbr_index(path_abbrs[index])
-      break unless abbr_hash.include? abbr
 
-      begin
-        path = File.join(path, abbr_hash[abbr][abbr_index])
-      rescue
-        display_error 'Wrong index'
+      if abbr_hash.include?(abbr)
+        begin
+          path = File.join(path, abbr_hash[abbr][abbr_index])
+        rescue
+          display_error 'Wrong index'
+        end
+      elsif abbr_hash.values.flatten.include?(abbr)
+        path = File.join(path, abbr)
+      else
+        break
       end
 
       index += 1
