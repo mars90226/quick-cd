@@ -19,9 +19,9 @@ Quick CD give all directories a abbreviation, you can use those abbreviation to 
 
 * `"Documents and Settings"` will get a abbreviation: `"das"` 
 * `"quick-cd"` will get a abbreviation: `"qc"`
-* `"no\_such\_directory"` will get a abbreviation: `"nsd"`
+* `"no_such_directory"` will get a abbreviation: `"nsd"`
 * `"RailsApplication"` will get a abbreviation: `"ra"`
-* `"PuttingAll together-into one\_name"` with get a abbreviation: `"pation"`
+* `"PuttingAll together-into one_name"` with get a abbreviation: `"pation"`
 * `"It will----ignore MULTiple delimiter"` will get a abbreviation: `"iwimd"`
 
 As you can see, Quick CD will split the directory name with underscore, hyphen, space, and capital letter and only retain the first charactor to make a abbreviation.  
