@@ -33,4 +33,4 @@ To find more help, use `qcd -h`. There maybe something weird like "using vim to 
 
 ## Install
 
-Quick CD require Windows platform, and support cmd and powershell. Download the files, put it into the same directory and add that directory into PATH. Then you can navigate through directories with Quick CD.
+Quick CD require Windows and Ruby, and support both cmd and powershell. Download the files, put it into the same directory and add that directory into PATH. Then you can navigate through directories with Quick CD.
