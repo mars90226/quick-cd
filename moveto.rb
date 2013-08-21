@@ -4,7 +4,7 @@ require 'optparse'
 
 LISTFILE = File.join(File.dirname(File.expand_path($0)), 'movelist.dump')
 
-targets = File.open(LISTFILE, 'r:big5') { |f| Marshal.load(f) }
+targets = File.exist?(LISTFILE) ? File.open(LISTFILE, 'r:big5') { |f| Marshal.load(f) } : {}
 
 options = {}
 optparse = OptionParser.new do |opts|
