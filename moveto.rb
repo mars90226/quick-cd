@@ -1,3 +1,5 @@
+# TODO: abbr support current folder, use '@' to refer to favorite
+
 require 'optparse'
 
 LISTFILE = File.join(File.dirname(File.expand_path($0)), 'movelist.dump')
@@ -103,7 +105,7 @@ else
 
     def get_abbr_hash(dirs)
       dirs.each_with_object(Hash.new { |h, k| h[k] = [] }) do |dir, abbr_hash|
-        abbr = dir.split(/[-_ ]|(?=[A-Z])/).map { |s| s[0].downcase }.join
+        abbr = dir.split(/[-_ ]+|(?<![A-Z])(?=[A-Z])/).map { |s| s[0].downcase }.join
         abbr_hash[abbr] << dir
       end
     end
@@ -137,6 +139,7 @@ else
     end
   end
 
+  path.gsub!('/', "\\")
   if options[:powershell]
     puts %[cd "#{path}"]
   else
