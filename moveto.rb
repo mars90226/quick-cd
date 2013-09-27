@@ -77,11 +77,9 @@ else
   if targets.include?(dir)
     dir = targets[dir]
   else
-    if dir.end_with?(':')
-      if File.exist?(dir)
+    if File.exist?(dir) # folder or drive
+      if dir.end_with?(':')
         dir << '/'
-      else
-        display_error 'No such drive'
       end
     else
       display_error 'Target not found'
