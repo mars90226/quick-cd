@@ -1,4 +1,4 @@
-# TODO: abbr support current folder, use '@' to refer to favorite
+# TODO: use '@' to refer to favorite
 
 require 'optparse'
 
@@ -73,6 +73,7 @@ else
   dir = ARGV[0].dup
   dir.gsub!("\\", '/') if dir.include?("\\")
   dir, *path_abbrs = dir.split('/')
+  dir = '\\' if dir.nil?
   
   if targets.include?(dir)
     dir = targets[dir]
