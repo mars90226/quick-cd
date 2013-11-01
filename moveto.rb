@@ -71,9 +71,13 @@ elsif ARGV.empty?
   puts optparse
 else
   dir = ARGV[0].dup
+  from_root = true if dir[0] == '/' or dir[0] == "\\"
   dir.gsub!("\\", '/') if dir.include?("\\")
   dir, *path_abbrs = dir.split('/')
-  dir = '\\' if dir.nil?
+  if from_root
+    path_abbrs.unshift dir unless dir.nil?
+    dir = '\\'
+  end
   
   if targets.include?(dir)
     dir = targets[dir]
