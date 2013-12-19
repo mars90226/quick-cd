@@ -130,8 +130,7 @@ else
         begin
           path = File.join(path, abbr_hash[abbr][abbr_index])
         rescue
-          #display_error 'Wrong index'
-          break
+          display_error 'Wrong index'
         end
       elsif abbr_hash.values.flatten.include?(abbr)
         path = File.join(path, abbr)
