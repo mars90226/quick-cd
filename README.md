@@ -5,7 +5,7 @@ This small command-line tool can help you quickly change directory to what you w
 
 ## Usage
 
-Here's a example: You want to quickly switch to "C:\Documents and Settings"
+Here's an example: You want to quickly switch to "C:\Documents and Settings"
 
 1. You need to add the directory first, so you can navigate it later on.  
 Cd to that directory and type `qcd -a document`. This will add the current directory with a name _document_.

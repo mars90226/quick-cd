@@ -13,7 +13,7 @@ optparse = OptionParser.new do |opts|
   opts.on('-l', '--list', 'Display target list') do |l|
     options[:list] = l
   end
-  
+
   opts.on('-m', '--modify', 'Modify source code') do |m|
     options[:modify] = m
   end
@@ -44,8 +44,8 @@ def display_error(error_message)
 end
 
 if options[:list]
-  targets.each do |name, path|
-    puts '%-12s%s' % [name + ': ', path.gsub('/', '\\')]
+  targets.each do |name, _path|
+    puts '%-12s%s' % [name + ': ', _path.gsub('/', '\\')]
   end
 elsif options[:modify]
   puts "vim #{File.expand_path($0)}"
@@ -78,7 +78,7 @@ else
     path_abbrs.unshift dir unless dir.nil?
     dir = '\\'
   end
-  
+
   if targets.include?(dir)
     dir = targets[dir]
   else
@@ -133,8 +133,8 @@ else
           #display_error 'Wrong index'
           break
         end
-      elsif abbr_hash.values.flatten.include?(abbr)
-        path = File.join(path, abbr)
+      elsif abbr_hash.values.flatten.include?(path_abbrs[index])
+        path = File.join(path, path_abbrs[index])
       else
         break
       end
