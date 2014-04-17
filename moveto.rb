@@ -108,14 +108,15 @@ else
 
     def get_abbr_hash(dirs)
       dirs.each_with_object(Hash.new { |h, k| h[k] = [] }) do |dir, abbr_hash|
-        abbr = dir.split(/[-_ ]+|(?<![A-Z])(?=[A-Z])/).map { |s| s[0].downcase }.join
+        abbr = dir.split(/[.\-_ ]+|(?<![A-Z])(?=[A-Z])|(?<=\D)(?=\d)/).map { |s| s[0].downcase }.join
         abbr_hash[abbr] << dir
       end
     end
 
     def get_path_abbr_index(path_abbr)
       if path_abbr[/\d+\Z/]
-        abbr, abbr_index = path_abbr.split(/(-?\d+\Z)/)
+        #abbr, abbr_index = path_abbr.split(/(-?\d+\Z)/)
+        abbr, abbr_index = path_abbr.split(/\:/) # split by :
         [abbr, abbr_index.to_i]
       else
         [path_abbr, 0]
@@ -125,7 +126,7 @@ else
     until index == path_abbrs.size
       abbr_hash = get_abbr_hash(get_all_dir(path))
       abbr, abbr_index = get_path_abbr_index(path_abbrs[index])
-
+      
       if abbr_hash.include?(abbr)
         begin
           path = File.join(path, abbr_hash[abbr][abbr_index])
