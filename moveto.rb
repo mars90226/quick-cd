@@ -108,7 +108,7 @@ else
 
     def get_abbr_hash(dirs)
       dirs.each_with_object(Hash.new { |h, k| h[k] = [] }) do |dir, abbr_hash|
-        abbr = dir.split(/[.\-_ ]+|(?<![A-Z])(?=[A-Z])|(?<=\D)(?=\d)/).map { |s| s[0].downcase }.join
+        abbr = dir.split(/[.\-_ ]+|(?<![A-Z])(?=[A-Z])|(?<=\D)(?=\d)/).reject { |s| s.empty? }.map { |s| s[0].downcase }.join
         abbr_hash[abbr] << dir
       end
     end
