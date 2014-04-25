@@ -1,6 +1,7 @@
 # TODO: use '@' to refer to favorite
 
 require 'optparse'
+require 'abbrev'
 
 LISTFILE = File.join(File.dirname(File.expand_path($0)), 'movelist.dump')
 
@@ -125,8 +126,11 @@ else
 
     until index == path_abbrs.size
       abbr_hash = get_abbr_hash(get_all_dir(path))
+      Abbrev.abbrev(abbr_hash.keys).each do |key, value|
+        abbr_hash[key] = abbr_hash[value]
+      end
       abbr, abbr_index = get_path_abbr_index(path_abbrs[index])
-      
+
       if abbr_hash.include?(abbr)
         begin
           path = File.join(path, abbr_hash[abbr][abbr_index])
