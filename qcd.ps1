@@ -1,13 +1,9 @@
-Param(
-    [string]$arg
-)
-
 $script = "moveto.rb"
 $tempfile = "moveto.ps1"
 $directory = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
 $path = Join-Path $directory $tempfile
 
-ruby (Join-Path $directory $script) $arg -p > $path
+ruby (Join-Path $directory $script) $args[0] -p > $path
 if($LASTEXITCODE -eq 10) {
 	& $path
 } else {
