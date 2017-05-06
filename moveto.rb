@@ -70,6 +70,8 @@ class PathCalculator
     end
 
     path, index = "", path_abbrs.size
+
+    # Remove unexist parts of path
     until File.exist? path
       path = File.join(dir, *path_abbrs[0, index])
       index -= 1
@@ -77,7 +79,10 @@ class PathCalculator
 
     index += 1
     unless index == path_abbrs.size
+
+      # Step forward to the path
       until index == path_abbrs.size
+        # Get list of abbreviation of directories
         abbr_hash = get_abbr_hash(get_all_dir(path))
         Abbrev.abbrev(abbr_hash.keys).each do |key, value|
           abbr_hash[key] = abbr_hash[value]
